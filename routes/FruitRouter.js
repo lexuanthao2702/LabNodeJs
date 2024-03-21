@@ -1,6 +1,9 @@
 var express = require("express");
 var router = express.Router();
 const modelFruit = require("../models/Fruit");
+const Upload = require("../config/Upload");
+const JWT = require("jsonwebtoken");
+const SECRECT_KEY = "cuthao";
 
 /* GET users listing. */
 router.get("/test", function (req, res, next) {
@@ -8,9 +11,16 @@ router.get("/test", function (req, res, next) {
 });
 
 // add data ----------------------------------------------------------
-router.post("/add", async (req, res) => {
+router.post("/add", Upload.array("images", 5), async (req, res) => {
   try {
+    const { files } = req;
+    const urlImages = files.map(
+      (file) =>
+        `${req.protocol} : // ${req.get("host")}/uploads/${file.filename}`
+    );
+    console.log(urlImages);
     const model = new modelFruit(req.body);
+    model.images = urlImages;
     const result = await model.save(); // them du lieu vao database
     if (result) {
       res.json({
@@ -33,8 +43,24 @@ router.post("/add", async (req, res) => {
 
 // display list user ----------------------------------------------------------
 router.get("/list", async (req, res) => {
-  const result = await modelFruit.find().populate("id_distributor");
   try {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+    if (!token) {
+      return res.sendStatus(401);
+    }
+    let payload;
+    JWT.verify(token, SECRECT_KEY, (err, _payload) => {
+      if (err instanceof JWT.TokenExpiredError) {
+        return res.sendStatus(401);
+      }
+      if (err) {
+        return res.sendStatus(403);
+      }
+      payload = _payload;
+    });
+    console.log("authHeader", authHeader);
+    const result = await modelFruit.find().populate("id_distributor");
     res.send(result);
   } catch (error) {
     console.log(error);

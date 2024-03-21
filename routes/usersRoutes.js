@@ -1,6 +1,8 @@
 var express = require("express");
 var router = express.Router();
 const modelUser = require("../models/User");
+const transporter = require("../config/Email");
+const Upload = require("../config/Upload");
 
 /* GET users listing. */
 router.get("/test", function (req, res, next) {
@@ -8,11 +10,21 @@ router.get("/test", function (req, res, next) {
 });
 
 // add data
-router.post("/add", async (req, res) => {
+router.post("/add", Upload.single("avarta"), async (req, res) => {
   try {
+    const { file } = req;
+    const urlImages = `${req.protocol}://${req.get("host")}/uploads/${file.filename}`;
     const model = new modelUser(req.body);
+    model.avarta = urlImages;
     const result = await model.save(); // them du lieu vao database
     if (result) {
+      const mailOption = {
+        from: "lexuanthao.tk7@gmail.com",
+        to: model.email, //mail người dùng đăng ký
+        subject: "Welcome NodeJs",
+        text: "Signup Successfuly",
+      };
+      await transporter.sendMail(mailOption);
       res.json({
         status: 200,
         message: "add success",
@@ -20,7 +32,7 @@ router.post("/add", async (req, res) => {
       });
     } else {
       res.json({
-        status: 200,
+        status: 400,
         message: "add fail",
         data: [],
       });
@@ -64,7 +76,7 @@ router.get("/getbyid/:id", async (req, res) => {
   }
 });
 
-// update user 
+// update user
 router.patch("/edit/:id", async (req, res) => {
   try {
     const result = await modelUser.findByIdAndUpdate(req.params.id, req.body);

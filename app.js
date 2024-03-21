@@ -9,6 +9,9 @@ var indexRouter = require('./routes/index');
 var userRouter = require("./routes/usersRoutes");
 var DistributorRouter = require("./routes/DistributorsRouter");
 var FruitRouter = require("./routes/FruitRouter");
+var UploadsRouter = require("./routes/upLoadRoutes");
+var EmailRoutes = require("./routes/EmailRoutes");
+var LoginRoutes = require("./routes/LoginRoutes");
 
 
 var app = express();
@@ -27,6 +30,9 @@ app.use('/', indexRouter);
 app.use("/users",userRouter);
 app.use("/Distributors",DistributorRouter);
 app.use("/Fruits",FruitRouter);
+app.use("/uploads",UploadsRouter);
+app.use("/sendmail",EmailRoutes);
+app.use("/login",LoginRoutes);
 
  
 

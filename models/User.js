@@ -7,6 +7,7 @@ const Users = new Schema({
   username: { type: String, unique: true, maxLength: 255},
   password: { type: String },
   email: { type: String, unique: true },
+  // email: { type: String },
   name: { type: String },
   avarta: { type: String },
   age: { type: Number, min: 18, max: 60 },
