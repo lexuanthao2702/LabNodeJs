@@ -12,7 +12,6 @@ var FruitRouter = require("./routes/FruitRouter");
 var UploadsRouter = require("./routes/upLoadRoutes");
 var EmailRoutes = require("./routes/EmailRoutes");
 var LoginRoutes = require("./routes/LoginRoutes");
-var App = require("./api/api");
 
 
 var app = express();
@@ -34,7 +33,6 @@ app.use("/Fruits",FruitRouter);
 app.use("/uploads",UploadsRouter);
 app.use("/sendmail",EmailRoutes);
 app.use("/login",LoginRoutes);
-app.use("/app",App);
 
  
 

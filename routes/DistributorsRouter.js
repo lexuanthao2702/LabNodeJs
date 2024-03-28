@@ -115,7 +115,7 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 
-router.get('/get-list-distributor', async (req, res) => {
+router.get("/get-list-distributor", async (req, res) => {
   try {
       const data = await Distributors.find().sort({createdAt: -1});
       if(data) {
@@ -136,7 +136,7 @@ router.get('/get-list-distributor', async (req, res) => {
   }
 })
 
-router.get('/search-distributors',async(req,res)=>{
+router.get("/search-distributors",async(req,res)=>{
   try {
       const key = req.query.key;
 
@@ -158,7 +158,7 @@ router.get('/search-distributors',async(req,res)=>{
       console.log(error)
   }
 })
-router.delete('/delete-distributors/:id', async (req, res) => {
+router.delete("/delete-distributors/:id", async (req, res) => {
   try {
       const { id } = req.params
       const result = await Distributors.findByIdAndDelete(id);
@@ -179,7 +179,7 @@ router.delete('/delete-distributors/:id', async (req, res) => {
       console.log(error);
   }
 })
-router.put('/update-distributors/:id', async(req,res)=>{
+router.put("/update-distributors/:id", async(req,res)=>{
   try {
       const {id}=req.params;
       const data = req.body;
