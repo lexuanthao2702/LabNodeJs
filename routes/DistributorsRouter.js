@@ -117,7 +117,7 @@ router.delete("/delete/:id", async (req, res) => {
 
 router.get("/get-list-distributor", async (req, res) => {
   try {
-      const data = await Distributors.find().sort({createdAt: -1});
+      const data = await modelDistributor.find().sort({createdAt: -1});
       if(data) {
           res.json({
               "status": 200,
@@ -140,7 +140,7 @@ router.get("/search-distributors",async(req,res)=>{
   try {
       const key = req.query.key;
 
-      const data = await Distributors.find({name:{"$regex":key, "$options":"i"}}).sort({createdAt:-1});
+      const data = await modelDistributor.find({name:{"$regex":key, "$options":"i"}}).sort({createdAt:-1});
       if(data){
           res.json({
               "status":200,
@@ -161,7 +161,7 @@ router.get("/search-distributors",async(req,res)=>{
 router.delete("/delete-distributors/:id", async (req, res) => {
   try {
       const { id } = req.params
-      const result = await Distributors.findByIdAndDelete(id);
+      const result = await modelDistributor.findByIdAndDelete(id);
       if (result) {
           res.json({
               "status": 200,
@@ -183,7 +183,7 @@ router.put("/update-distributors/:id", async(req,res)=>{
   try {
       const {id}=req.params;
       const data = req.body;
-      const result = await Distributors.findByIdAndUpdate(id,{name:data.name});
+      const result = await modelDistributor.findByIdAndUpdate(id,{name:data.name});
       if(result){
           res.json({
               "status": 200,
