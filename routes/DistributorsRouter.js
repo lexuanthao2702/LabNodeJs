@@ -114,4 +114,91 @@ router.delete("/delete/:id", async (req, res) => {
     }
   }
 });
+
+router.get('/get-list-distributor', async (req, res) => {
+  try {
+      const data = await Distributors.find().sort({createdAt: -1});
+      if(data) {
+          res.json({
+              "status": 200,
+              "messenger": "thành công",
+              "data": data
+          })
+      } else {
+          res.json({
+              "status": 400,
+              "messenger": "Lỗi, không thành công",
+              "data": []
+          })
+      }
+  } catch (error) {
+     console.log(error) 
+  }
+})
+
+router.get('/search-distributors',async(req,res)=>{
+  try {
+      const key = req.query.key;
+
+      const data = await Distributors.find({name:{"$regex":key, "$options":"i"}}).sort({createdAt:-1});
+      if(data){
+          res.json({
+              "status":200,
+              "messenger":"Thành công",
+              "data":data
+          })
+      }else{
+          res.json({
+              "status":400,
+              "messenger":"Không thành công",
+              "data":[]
+          })
+      }
+  } catch (error) {
+      console.log(error)
+  }
+})
+router.delete('/delete-distributors/:id', async (req, res) => {
+  try {
+      const { id } = req.params
+      const result = await Distributors.findByIdAndDelete(id);
+      if (result) {
+          res.json({
+              "status": 200,
+              "messenger": "Xóa thành công",
+              "data": result
+          })
+      } else {
+          res.json({
+              "status": 400,
+              "messenger": "Lỗi, xóa không thành công",
+              "data": []
+          })
+      }
+  } catch (error) {
+      console.log(error);
+  }
+})
+router.put('/update-distributors/:id', async(req,res)=>{
+  try {
+      const {id}=req.params;
+      const data = req.body;
+      const result = await Distributors.findByIdAndUpdate(id,{name:data.name});
+      if(result){
+          res.json({
+              "status": 200,
+              "messenger": "Sửa thành công",
+              "data": result
+          })
+      }else{
+          res.json({
+              "status": 400,
+              "messenger": "Lỗi, sửa không thành công",
+              "data": []
+          })
+      }
+  } catch (error) {
+      console.log(error);
+  }
+})
 module.exports = router;
